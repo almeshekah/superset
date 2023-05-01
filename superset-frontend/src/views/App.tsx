@@ -28,7 +28,6 @@ import { bindActionCreators } from 'redux';
 import { GlobalStyles } from 'src/GlobalStyles';
 import ErrorBoundary from 'src/components/ErrorBoundary';
 import Loading from 'src/components/Loading';
-import Menu from 'src/features/home/Menu';
 import getBootstrapData from 'src/utils/getBootstrapData';
 import ToastContainer from 'src/components/MessageToasts/ToastContainer';
 import setupApp from 'src/setup/setupApp';
@@ -41,6 +40,7 @@ import { store } from 'src/views/store';
 import { RootContextProviders } from './RootContextProviders';
 import { ScrollToTop } from './ScrollToTop';
 import QueryProvider from './QueryProvider';
+import { SideMenu } from 'src/components/sideMenu';
 
 setupApp();
 setupPlugins();
@@ -76,21 +76,19 @@ const App = () => (
       <LocationPathnameLogger />
       <RootContextProviders>
         <GlobalStyles />
-        <Menu
-          data={bootstrapData.common.menu_data}
-          isFrontendRoute={isFrontendRoute}
-        />
-        <Switch>
-          {routes.map(({ path, Component, props = {}, Fallback = Loading }) => (
-            <Route path={path} key={path}>
-              <Suspense fallback={<Fallback />}>
-                <ErrorBoundary>
-                  <Component user={bootstrapData.user} {...props} />
-                </ErrorBoundary>
-              </Suspense>
-            </Route>
-          ))}
-        </Switch>
+        <SideMenu>
+          <Switch>
+            {routes.map(({ path, Component, props = {}, Fallback = Loading }) => (
+              <Route path={path} key={path}>
+                <Suspense fallback={<Fallback />}>
+                  <ErrorBoundary>
+                    <Component user={bootstrapData.user} {...props} />
+                  </ErrorBoundary>
+                </Suspense>
+              </Route>
+            ))}
+          </Switch>
+        </SideMenu>
         <ToastContainer />
       </RootContextProviders>
     </Router>
